@@ -68,10 +68,10 @@ If you haven't written a markdown file yet, [click here for a rundown](https://g
 <!-- 	* If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices, and quantities. -->
 <!-- 
 	* If a manager selects `View Low Inventory`, then it should list all items with a inventory count lower than five. -->
-
-	* If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
-
-	* If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
+<!-- 
+	* If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store. -->
+<!-- 
+	* If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store. -->
 
 ---------------------------------
 
@@ -80,7 +80,7 @@ If you haven't written a markdown file yet, [click here for a rundown](https://g
 ------------------------------------
 
 ### Challenge #3: Supervisor View (Final Level)
-
+<!-- 
 1. Create a new MySQL table called `departments`. Your table should include the following columns:
 
 	* department_id
@@ -89,13 +89,13 @@ If you haven't written a markdown file yet, [click here for a rundown](https://g
 
 	* over_head_costs (A dummy number you set for each department)
 
-	* total_sales
+	* total_sales -->
 
-2. Modify the products table so that theres a product_sales column and modify the `bamazonCustomer.js` app so that this value is updated with each individual products total revenue from each sale.
-
+<!-- 2. Modify the products table so that theres a product_sales column and modify the `bamazonCustomer.js` app so that this value is updated with each individual products total revenue from each sale. -->
+<!-- 
 3. Modify your `bamazonCustomer.js` app so that when a customer purchases anything from the store, the program will calculate the total sales from each transaction.
 	* Add the revenue from each transaction to the `total_sales` column for the related department.
-	* Make sure your app still updates the inventory listed in the `products` column.
+	* Make sure your app still updates the inventory listed in the `products` column. -->
 
 4. Create another Node app called `bamazonSupervisor.js`. Running this application will list a set of menu options:
 	* View Product Sales by Department

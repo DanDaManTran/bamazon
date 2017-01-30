@@ -2,6 +2,7 @@
 //stuff that is required
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+var idArray = [];
 
 //creating access way to connect to mysql
 const connection = mysql.createConnection({
@@ -19,6 +20,14 @@ const connection = mysql.createConnection({
 //connecting to the database
 connection.connect(function(err) {
   if (err) throw err;
+});
+
+connection.query("SELECT * FROM products", function(err, res) {
+    if(err) throw err;
+
+    for(var i=0; i<res.length; i++){
+      	idArray.push(res[i].item_id);
+    }
 });
 
 //adding spacing to the string so it can create a table in the console
@@ -51,6 +60,18 @@ function priceString (price){
 	return priceInput;
 };
 
+function idChecking(inputID) { 
+  	var checker = false;
+
+  	for(var i = 0; i<idArray.length; i++){
+    	if(idArray[i] === inputID){
+    	  	checker = true;
+    	}
+  	}
+
+	return checker;
+};
+
 //displaying the inventory list for that manager
 function display () {
 	connection.query("SELECT * FROM products", function(err, res) {
@@ -61,6 +82,7 @@ function display () {
 			console.log("-----------------------------------------------------------------------------");
 		}
 
+		connection.end();
 	});
 };
 
@@ -73,33 +95,53 @@ function gettingLow (){
 			console.log(idString(res[i].item_id) + " | " + nameString(res[i].product_name));
 			console.log("------------------------------------");
 	    }
+
+	    connection.end();
 	});
 };
 
 //this function will find the ID manager want to order more items for and it will update the database accordingly
 function addInven (ID){
-
 	connection.query("SELECT stock_quantity, product_name FROM products WHERE ?", {item_id: ID}, function(err, res){
 		if(err) throw err;
 
 		let newStock = res[0].stock_quantity + 20;
 
-		console.log(ID);
-
 		updateOrder(ID, newStock);
 
 		console.log("You have ordered 20 more " + res[0].product_name + " for your stock.");
+
+		connection.end();
 	});
 };
 
-//WTF THIS IS NOT WORKING!!!!!!!!!
 function updateOrder (ID, quant){
-	connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: quant}, {item_id: ID}], function(err, res) {});
+	connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: quant}, {item_id: ID}], function(err, res) {
+		if(err) throw err;
+	});
 };
-//*********************************************
 
-function newProduct ( ){
-	connection.query("")
+function ProductInfo(name, department, price, stock){
+	if(!(this instanceof ProductInfo)){
+		return new ProductInfo(name, department, price, stock);
+	}
+
+	this.product_name = name;
+	this.department_name = department;
+	this.price = price;
+	this.stock_quantity = stock;
+};
+
+function newProduct (name, dep, price, stock){
+	var pushProduct = new ProductInfo(name, dep, price, stock);
+
+	connection.query("INSERT INTO products SET ?", pushProduct, function(err, res) {
+      	if(err) throw err;
+
+      	console.log("Congrats!! Your item have been posted.");
+    });
+
+	connection.end();
 };
 
 //questioning the manager for what they want to do
@@ -116,6 +158,96 @@ inquirer.prompt([
 		message: "What is the ID of the item you want to order more?",
 		when: function(answers){
 			return answers.menu === "Add to Inventory";
+		},
+		validate: function (input) {
+			var done = this.async();
+
+			setTimeout(function () {
+				if (isNaN(input)) {
+					done('You need to provide a number');
+					return;
+				} else if(!idChecking(parseInt(input))){
+					done('You need to provide an ID on the list');
+					return;
+				}
+				done(null, true);
+			}, 3000);
+		}
+	}
+	, {
+		type: "input",
+		name: "newName",
+		message: "What is the name of this new product?",
+		when: function(answers){
+			return answers.menu === "Add New Product";
+		},
+		validate: function (input) {
+			var done = this.async();
+
+			setTimeout(function () {
+				if (!input) {
+					done('Please input a name of the product');
+					return;
+				} 
+				done(null, true);
+			}, 3000);
+		}
+	}
+	, {
+		type: "input",
+		name: "newDep",
+		message: "What deparment does this new product belong in?",
+		when: function(answers){
+			return answers.menu === "Add New Product";
+		},
+		validate: function (input) {
+			var done = this.async();
+
+			setTimeout(function () {
+				if (!input) {
+					done('Please input a deparment');
+					return;
+				} 
+				done(null, true);
+			}, 3000);
+		}
+	}
+	, {
+		type: "input",
+		name: "newPrice",
+		message: "How much will you be selling this product for?",
+		when: function(answers){
+			return answers.menu === "Add New Product";
+		},
+		validate: function (input) {
+			var done = this.async();
+
+			setTimeout(function () {
+				if (isNaN(input) || !input) {
+					done('Please input a price');
+					return;
+				} 
+				done(null, true);
+			}, 3000);
+		}
+	}
+	, {
+		type: "input",
+		name: "newStock",
+		message: "How much will you be ready to stock for this product?",
+		when: function(answers){
+			return answers.menu === "Add New Product";
+		},
+		validate: function (input) {
+			var done = this.async();
+
+			setTimeout(function () {
+				if (isNaN(input) || !input) {
+					done('Please input a quantity');
+					return;
+				} 
+				done(null, true);
+			}, 3000);
 		}
 	}
 ]).then(function(user) {
@@ -123,15 +255,15 @@ inquirer.prompt([
 	switch(user.menu){
 		case "View Products for Sale":
 			display();
-			connection.end();
 			break;
 		case "View Low Inventory":
 			gettingLow();
-			connection.end();
 			break;
 		case "Add to Inventory":
 			addInven(user.idInput);
-			connection.end();
+			break;
+		case "Add New Product":
+			newProduct(user.newName, user.newDep, user.newPrice, user.newStock);
 			break;
 	};
 });
