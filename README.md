@@ -65,9 +65,9 @@ If you haven't written a markdown file yet, [click here for a rundown](https://g
 		* Add to Inventory
 		* Add New Product
 
-	* If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices, and quantities.
-
-	* If a manager selects `View Low Inventory`, then it should list all items with a inventory count lower than five.
+<!-- 	* If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices, and quantities. -->
+<!-- 
+	* If a manager selects `View Low Inventory`, then it should list all items with a inventory count lower than five. -->
 
 	* If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 

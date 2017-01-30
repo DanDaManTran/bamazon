@@ -46,17 +46,34 @@ function display () {
   connection.query("SELECT * FROM products", function(err, res) {
     if(err) throw err;
 
+    var idArray = [];
+
     for(var i=0; i<res.length; i++){
+      idArray.push(res[i].item_id);
+
       console.log(idString(res[i].item_id) + " |  " + nameString(res[i].product_name) + "|  " + "Price: " + res[i].price.toFixed(2));
       console.log("-----------------------------------------------------------------------------");
     }
 
-    question();
+
+    question(idArray);
   });
 };
 
+function idCheck (id, arrayId){
+  var checker = false;
+
+  for(var i = 0; i<arrayId.length; i++){
+    if(arrayId[i] === id){
+      checker = true;
+    }
+  }
+
+  return checker;
+};
+
 //function to ask buyers questions and then sending it into posting function
-function question(){
+function question(array){
   inquirer.prompt([
     {
       type: "input",
@@ -68,6 +85,9 @@ function question(){
         setTimeout(function () {
           if (isNaN(input)) {
             done('You need to provide a number');
+            return;
+          } else if(!idCheck(parseInt(input), array)){
+            done('You need to provide an ID on the list');
             return;
           }
           done(null, true);
@@ -102,7 +122,7 @@ function checking (ID, quant){
     connection.query("SELECT stock_quantity, product_name, price FROM products WHERE ?",{item_id: ID} , function(err, res){
       if(err) throw err;
 
-      var newStock = res[0].stock_quantity - quant;
+      let newStock = res[0].stock_quantity - quant;
 
       if(res[0].stock_quantity<quant){
         console.log("Insufficient quantity!");
