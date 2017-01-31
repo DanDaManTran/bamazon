@@ -3,6 +3,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 var idArray = [];
+var depArray = [];
 
 //creating access way to connect to mysql
 const connection = mysql.createConnection({
@@ -27,6 +28,14 @@ connection.query("SELECT * FROM products", function(err, res) {
 
     for(var i=0; i<res.length; i++){
       	idArray.push(res[i].item_id);
+    }
+});
+
+connection.query("SELECT * FROM departments", function(err, res) {
+    if(err) throw err;
+
+    for(var i=0; i<res.length; i++){
+      	depArray.push(res[i].department_name);
     }
 });
 
@@ -132,8 +141,8 @@ function ProductInfo(name, department, price, stock){
 	this.stock_quantity = stock;
 };
 
-function newProduct (name, dep, price, stock){
-	var pushProduct = new ProductInfo(name, dep, price, stock);
+function newProduct (pushProduct){
+	// var pushProduct = new ProductInfo(name, dep, price, stock);
 
 	connection.query("INSERT INTO products SET ?", pushProduct, function(err, res) {
       	if(err) throw err;
@@ -194,9 +203,10 @@ inquirer.prompt([
 		}
 	}
 	, {
-		type: "input",
+		type: "list",
 		name: "newDep",
 		message: "What deparment does this new product belong in?",
+		choices: depArray,
 		when: function(answers){
 			return answers.menu === "Add New Product";
 		},
@@ -263,7 +273,7 @@ inquirer.prompt([
 			addInven(user.idInput);
 			break;
 		case "Add New Product":
-			newProduct(user.newName, user.newDep, user.newPrice, user.newStock);
+			newProduct(new ProductInfo(user.newName, user.newDep, user.newPrice, user.newStock));
 			break;
 	};
 });

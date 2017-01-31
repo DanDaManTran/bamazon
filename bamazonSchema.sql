@@ -1,6 +1,14 @@
-CREATE DATABASE Bamazon;
+CREATE DATABASE testing;
 
-USE Bamazon;
+USE testing;
+
+CREATE TABLE IF NOT EXISTS products (
+	item_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    department_name VARCHAR(45),
+    price DECIMAL(7,2) NOT NULL,
+    stock_quantity INT(10) UNSIGNED NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS departments (
 	department_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -8,13 +16,5 @@ CREATE TABLE IF NOT EXISTS departments (
     over_head_costs INT(11) NOT NULL DEFAULT 0,
     total_sales INT(11) NOT NULL DEFAULT 0
 );
-
-INSERT INTO departments (department_name, over_head_costs, total_sales)
-VALUES ('Board Games', 100, 0)
-, ('Electronics', 3000, 0)
-, ('Misc.', 200, 0)
-, ('Home Goods', 200, 0)
-, ('Sports', 500, 0)
-, ('Toys', 150, 0);
 
 Alter TABLE products ADD column total_sales int(11) not null default 0;
