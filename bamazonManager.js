@@ -23,6 +23,7 @@ connection.connect(function(err) {
   if (err) throw err;
 });
 
+//creating an ID array for validation
 connection.query("SELECT * FROM products", function(err, res) {
     if(err) throw err;
 
@@ -31,6 +32,7 @@ connection.query("SELECT * FROM products", function(err, res) {
     }
 });
 
+//creating a list of deparments for the list inquirer
 connection.query("SELECT * FROM departments", function(err, res) {
     if(err) throw err;
 
@@ -69,6 +71,7 @@ function priceString (price){
 	return priceInput;
 };
 
+//this function will check if the user ID input matches with any of the ID in the array to make sure they are making a valid purchase
 function idChecking(inputID) { 
   	var checker = false;
 
@@ -124,12 +127,14 @@ function addInven (ID){
 	});
 };
 
+//this will update the data base that we just ordered 20 more of what ever product that is needed to be added
 function updateOrder (ID, quant){
 	connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: quant}, {item_id: ID}], function(err, res) {
 		if(err) throw err;
 	});
 };
 
+//consturter to create a new product for sell in the store. 
 function ProductInfo(name, department, price, stock){
 	if(!(this instanceof ProductInfo)){
 		return new ProductInfo(name, department, price, stock);
@@ -141,9 +146,8 @@ function ProductInfo(name, department, price, stock){
 	this.stock_quantity = stock;
 };
 
+//creating a new product line in the database depending on the inputs of the manager
 function newProduct (pushProduct){
-	// var pushProduct = new ProductInfo(name, dep, price, stock);
-
 	connection.query("INSERT INTO products SET ?", pushProduct, function(err, res) {
       	if(err) throw err;
 
@@ -153,7 +157,7 @@ function newProduct (pushProduct){
 	connection.end();
 };
 
-//questioning the manager for what they want to do
+//questioning the manager for what they want to do then depending on the inputs we will do a switch case and trigger what is needed to be trigger
 inquirer.prompt([
 	{
 		type: "list",

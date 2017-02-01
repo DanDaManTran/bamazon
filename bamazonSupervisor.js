@@ -20,6 +20,7 @@ connection.connect(function(err) {
 	if (err) throw err;
 });
 
+//creating enough spaces so it can display in the console beautifully
 function idString(id){
 	let idInput = "| " + id;
 
@@ -30,6 +31,7 @@ function idString(id){
 	return idInput;
 };
 
+//creating enough spaces so it can display in the console beautifully
 function string18(name){
 	let nameInput = "| " + name;
 
@@ -40,6 +42,7 @@ function string18(name){
 	return nameInput;
 };
 
+//creating enough spaces so it can display in the console beautifully
 function string15(name){
 	let nameInput = "| " + name;
 
@@ -50,6 +53,7 @@ function string15(name){
 	return nameInput;
 };
 
+//creating enough spaces so it can display in the console beautifully
 function string14(name){
 	let nameInput = "| " + name;
 
@@ -60,6 +64,7 @@ function string14(name){
 	return nameInput;
 };
 
+//display the data base soo it can show sales stuff in each department
 function display(){
 	connection.query("SELECT * FROM departments", function(err, res) {
 	    if(err) throw err;
@@ -78,6 +83,7 @@ function display(){
     });
 };
 
+//consturtor so we can create a new department when every the Supervisor want to create one
 function NewDep (name, over){
 	if(!this instanceof NewDep){
 		return new NewDep(name, over);
@@ -88,6 +94,7 @@ function NewDep (name, over){
 	this.total_sales = 0;
 };
 
+//creating a new department in our data base from the pushProduct which is our consturtor
 function newDeparment (pushProduct){
 	connection.query("INSERT INTO departments SET ?", pushProduct, function(err, res) {
       	if(err) throw err;
@@ -98,6 +105,7 @@ function newDeparment (pushProduct){
 	connection.end();
 };
 
+//this will ask a series of questions depending on the user input it will do either display the table or create new department
 inquirer.prompt([
 	{
 		type: "list",

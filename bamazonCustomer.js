@@ -41,7 +41,7 @@ function nameString(name){
   return nameInput;
 };
 
-//displaying the list a customer can purchase from the data base 
+//displaying the list a customer can purchase from the data base and then it would trigger the questions function with the idArray
 function display () {
   connection.query("SELECT * FROM products", function(err, res) {
     if(err) throw err;
@@ -55,11 +55,11 @@ function display () {
       console.log("-----------------------------------------------------------------------------");
     }
 
-
     question(idArray);
   });
 };
 
+//this function will check if the user ID input matches with any of the ID in the array to make sure they are making a valid purchase
 function idCheck (id, arrayId){
   var checker = false;
 
