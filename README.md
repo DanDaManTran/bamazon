@@ -1,6 +1,6 @@
 #Week of 12 HW: Node.js & MySQL
 
-![Demo](http://s20.postimg.org/wfxbv3kwd/drawermenu.gif)
+![Demo](/dan.jpg)
 
 ### Overview
 
