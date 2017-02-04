@@ -2,6 +2,7 @@
 //stuff that is required
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+const kee = require("./key.js");
 
 //creating access way to connect to mysql
 const connection = mysql.createConnection({
@@ -12,7 +13,7 @@ const connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "whatpassword",
+  password: kee.key,
   database: "Bamazon"
 });
 
@@ -81,7 +82,7 @@ function question(array){
       message: "What is the ID of the item you want to purchase?",
       validate: function (input) {
         var done = this.async();
-     
+
         setTimeout(function () {
           if (isNaN(input) || !input || input<0) {
             done('You need to provide a number');
@@ -100,7 +101,7 @@ function question(array){
       message: "How many do you want of this item?",
       validate: function (input) {
         var done = this.async();
-     
+
         setTimeout(function () {
           if (isNaN(input) || !input || input<0) {
             done('You need to provide a number');
@@ -146,7 +147,7 @@ function total(price, count){
 };
 
 //it will update the DB after the purchase
-function updatePurchase(ID ,depart, quant, storeProfit, sale){  
+function updatePurchase(ID ,depart, quant, storeProfit, sale){
   connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: quant}, {item_id: ID}], function(err, res) {if(err) throw err;});
   connection.query("UPDATE products SET ? WHERE ?", [{total_sales: storeProfit}, {item_id: ID}], function(err, res) {if(err) throw err;});
   connection.query("SELECT total_sales FROM departments WHERE ?",{department_name: depart}, function(err, res){
@@ -161,5 +162,3 @@ function updatePurchase(ID ,depart, quant, storeProfit, sale){
 
 //starting running the app
 display();
-
-

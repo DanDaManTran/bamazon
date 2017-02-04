@@ -2,6 +2,7 @@
 //stuff that is required
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+const kee = require("./key.js");
 
 const connection = mysql.createConnection({
 	host: "localhost",
@@ -11,7 +12,7 @@ const connection = mysql.createConnection({
 	user: "root",
 
 	// Your password
-	password: "whatpassword",
+	password: kee.key,
 	database: "Bamazon"
 });
 
@@ -127,7 +128,7 @@ inquirer.prompt([
 				if (!input) {
 					done('You need enter a name');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}
@@ -146,7 +147,7 @@ inquirer.prompt([
 				if (isNaN(input) || !input || input<0) {
 					done('You need to provide a number');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}

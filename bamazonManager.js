@@ -2,6 +2,7 @@
 //stuff that is required
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+const kee = require("./key.js");
 var idArray = [];
 var depArray = [];
 
@@ -14,7 +15,7 @@ const connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "whatpassword",
+  password: kee.key,
   database: "Bamazon"
 });
 
@@ -72,7 +73,7 @@ function priceString (price){
 };
 
 //this function will check if the user ID input matches with any of the ID in the array to make sure they are making a valid purchase
-function idChecking(inputID) { 
+function idChecking(inputID) {
   	var checker = false;
 
   	for(var i = 0; i<idArray.length; i++){
@@ -134,7 +135,7 @@ function updateOrder (ID, quant){
 	});
 };
 
-//consturter to create a new product for sell in the store. 
+//consturter to create a new product for sell in the store.
 function ProductInfo(name, department, price, stock){
 	if(!(this instanceof ProductInfo)){
 		return new ProductInfo(name, department, price, stock);
@@ -201,7 +202,7 @@ inquirer.prompt([
 				if (!input) {
 					done('Please input a name of the product');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}
@@ -221,7 +222,7 @@ inquirer.prompt([
 				if (!input) {
 					done('Please input a deparment');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}
@@ -240,7 +241,7 @@ inquirer.prompt([
 				if (isNaN(input) || !input) {
 					done('Please input a price');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}
@@ -259,7 +260,7 @@ inquirer.prompt([
 				if (isNaN(input) || !input) {
 					done('Please input a quantity');
 					return;
-				} 
+				}
 				done(null, true);
 			}, 3000);
 		}
@@ -281,6 +282,3 @@ inquirer.prompt([
 			break;
 	};
 });
-
-
-
